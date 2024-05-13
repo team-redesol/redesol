@@ -1,27 +1,27 @@
-import os
+import os #importando tudo o que é preciso
 import time
+import subprocess
 import webbrowser
 from datetime import datetime
 from dateutil import tz
 import csv
 import re
 
-def install_requirements():
-    # Instala os requisitos do projeto a partir de um arquivo requirements.txt
+#senha do admin é redesolpassc0de
+
+def install_requirements(): #instalando packages
     subprocess.check_call(['pip', 'install', '-r', 'requirements.txt'])
 
 install_requirements()
 
 
 def install_package(package):
-    # Instala um pacote Python
     subprocess.check_call(['pip', 'install', package])
 
 install_package('python-dateutil')
 
 
-def print_menuascii():
-    # Exibe um menu ASCII
+def print_menuascii(): #menu bonitinho (i tried)
     print(
         """                                                                                                                                                                                            
                                               ≠≠≠=÷÷÷÷÷=≠≠≠       
@@ -44,14 +44,13 @@ def view_last_events():
 
 
 def post_newsletter(titulo, conteudo): 
-    # Publica uma notícia no formato data/hora, título e conteúdo em um arquivo CSV
+    #Publica uma notícia no formato data/hora, título e conteúdo em CSV
     data_hora = datetime.now(tz.gettz('America/Recife')).strftime('%d/%m/%Y %H:%M:%S')
     with open('news.csv', 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow([data_hora, titulo, conteudo])
 
-def delete_news(): 
-    # Deleta notícias com base em uma tag fornecida pelo administrador
+def delete_news(): #Deleta notícias com base em uma tag 
     tag = input("Digite a Tag da notícia que deseja deletar: ")
     noticias = []
     with open('news.csv', 'r', newline='') as csvfile:
@@ -65,8 +64,7 @@ def delete_news():
         writer.writerows(noticias)
     print("\nNotícia(s) deletada(s) com sucesso.")
 
-def newsletter_view(): 
-    # Exibe as notícias armazenadas em um arquivo CSV
+def newsletter_view(): #Exibindo notícias 
     try:
         with open('news.csv', 'r', newline='') as csvfile:
             reader = csv.reader(csvfile)
@@ -76,40 +74,38 @@ def newsletter_view():
     except FileNotFoundError:
         print("\nAinda não há notícias postadas.")
 
-def subscribe_to_my_newsletter(email): 
-    # Permite que os usuários se inscrevam para receber a newsletter
-    if validar_email(email): 
+def subscribe_to_my_newsletter(email): #Inscreve usuários na newsletter
+    if validar_email(email):  #retorno da função de validação
         with open('emails.txt', 'r') as arquivo_inscritos: 
             email_dupli = arquivo_inscritos.readlines()
 
         if email + '\n' in email_dupli:
             print("Esse e-mail já está cadastrado. ")
         else:
-            with open('emails.txt', 'a') as arquivo_inscritos: 
+            with open('emails.txt', 'a') as arquivo_inscritos:  #se não existir, registre o e-mail no txt
                 arquivo_inscritos.write(email + '\n')
             print("\nInscrição realizada com sucesso! ")
     else:
         print("O endereço de e-mail digitado é inválido. ") 
         print("Por favor, insira um e-mail válido. ")
 
-def validar_email(email): 
-    # Valida o formato do endereço de e-mail
+def validar_email(email):  #Padrão para endereço de e-mail
     email_validation = r'^[\w\.-]+@[\w\.-]+\.\w+$' 
-    if re.match(email_validation, email): 
-        return True 
+    if re.match(email_validation, email): #Veja se o e-mail é válido
+        return True #Caso seja valido retorne True
     else:
-        return False 
+        return False #Caso não seja valido retorne False
 
-def remover_email(email):
-    # Remove um e-mail da lista de inscritos
+
+def remover_email(email):#Remove um e-mail da lista de inscritos
     with open('emails.txt', 'r') as arquivo_inscritos:
-        emails = arquivo_inscritos.readlines()
+        emails = arquivo_inscritos.readlines() 
 
-    if email + '\n' in emails:
+    if email + '\n' in emails: #Procura se o e-mail está na lista de inscritos
         emails.remove(email + '\n')
         print("E-mail removido com sucesso.")
     else:
-        print("O e-mail não está inscrito.")
+        print("O e-mail não está inscrito.") #Se não estiver na lista de inscritos, retorna a mensagem
 
     try:
         with open('emails.txt', 'w') as arquivo_inscritos:
@@ -132,12 +128,10 @@ def newsletter_menu():
             email = input("Digite seu e-mail para remover sua inscrição: ")
             remover_email(email)
 
-def instabread():
-    # Abre o Instagram da Casa do Pão no navegador padrão
+def instabread(): #Redirecionar para as redes sociais
     webbrowser.open("https://www.instagram.com/casadopaoaor/")
 
-def admin_login():
-    # Realiza o login do administrador
+def admin_login(): #login de admin (preguiça de fazer sistema de cadastro)
     senha = "redesolpassc0de"
     while True:
         senhainput = input("Digite a senha do Administrador ")
@@ -148,8 +142,7 @@ def admin_login():
             print("\nSenha incorreta. Acesso Negado ")
             admin_login()
 
-def admin_menu():
-    # Menu de administração para operações avançadas
+def admin_menu(): #Menu de administração 
     while True:
         print("1. Adicionar notícias ao quadro ")
         print("2. Modificar notícias no quadro ")
@@ -167,8 +160,7 @@ def admin_menu():
         elif userinp == "3":
             newsletter_view()
 
-def main():
-    # Função principal que controla o fluxo do programa
+def main(): #Função principal
     while True:
         print_menuascii()
         print("Bem vindo ao aplicativo Redesol! ")
