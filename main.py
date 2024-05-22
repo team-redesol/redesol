@@ -1,5 +1,4 @@
-import os #importando tudo o que é preciso
-import time
+#importando tudo o que é preciso
 import subprocess
 import webbrowser
 from datetime import datetime
@@ -12,8 +11,7 @@ from email.message import EmailMessage
 file_emails = 'emails.txt'
 file_news = 'news.csv'
 EMAIL_ADDRESS = 'aredesol2024@outlook.com'
-#EMAIL_PASSWORD = 'Admin2024'
-#email admin: aredesol2024@gmail.com
+#email admin: aredesol2024@outlook.com
 
 #senha do admin é redesolpassc0de
 
