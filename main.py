@@ -9,8 +9,6 @@ import smtplib
 from email.message import EmailMessage
 
 # verificar essas bibliotecas
-from Flask import Flask, Response, request, abort, render_template_string, send_from_directory
-from PIL import Image
 import os
 from flask import Flask, Response, request, abort, render_template_string, send_from_directory
 from PIL import Image
