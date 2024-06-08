@@ -1,4 +1,4 @@
-#importando tudo o que é preciso
+# importando tudo o que é preciso
 import subprocess
 import webbrowser
 from datetime import datetime
@@ -7,15 +7,26 @@ import csv
 import re
 import smtplib
 from email.message import EmailMessage
-
-# verificar essas bibliotecas
 import os
-from flask import Flask, Response, request, abort, render_template_string, send_from_directory
+
+from flask import Flask, Response, request, abort, render_template_string, send_from_directory # Importar flask, pillow
 from PIL import Image
 try:
-    from StringIO import StringIO
+    from io import StringIO  
 except ImportError:
-    from io import StringIO
+    from io import BytesIO as StringIO  
+    
+def install_dependencies(): # Instalar dependencias a partir do txt 
+    try:
+        subprocess.check_call(['pip', 'install', '-r', 'requirements.txt'])
+        print("Dependências instaladas com sucesso.")
+    except subprocess.CalledProcessError as e:
+        print(f"Erro ao instalar as dependências: {e}")
+    except FileNotFoundError:
+        print("O comando pip não foi encontrado. Verifique se o Python está instalado corretamente.")
+
+install_dependencies()
+
 
 file_emails = 'emails.txt'
 file_news = 'news.csv'
@@ -58,15 +69,6 @@ def newsletter_send(destinatarios, conteudo_csv, EMAIL_PASSWORD):
             print(f"Erro ao enviar e-mail para {destinatario}: {e}")
 
 
-def install_requirements(): #instalando packages
-    subprocess.check_call(['pip', 'install', '-r', 'requirements.txt'])
-
-install_requirements()
-
-def install_package(package):
-    subprocess.check_call(['pip', 'install', package])
-
-install_package('python-dateutil')
 
 
 def print_menuascii(): #menu bonitinho em ascii (i tried)
@@ -226,7 +228,7 @@ def newsletter_menu(): # Menu para operações relacionadas a newsletter
         else:
             print("\nOpção inválida. Tente novamente.")
 
-def instabread(): #Redirecionar para as redes sociais
+def instabread(): # Redirecionar para as redes sociais
     webbrowser.open("https://www.instagram.com/casadopaoaor/")
 
 def admin_login(): # menu de login basico
@@ -242,7 +244,7 @@ def admin_login(): # menu de login basico
         else:
             print("\nSenha incorreta. Acesso Negado ")
 
-def admin_menu(): #menu do admin
+def admin_menu(): # menu do admin
     while True:
         print("\n1 - Adicionar notícias ao quadro ")
         print("2 - Remover notícias no quadro ")
@@ -272,7 +274,7 @@ def admin_menu(): #menu do admin
             
 ## verificar essa parte do código porque honestamente tudo que estudei e pesquisei sobre a galeria era extremamente
 ## complexo e envolvia API pra caralho e muita coisa de frontend (que eu nao faço ideia)
-def image(filename):
+def image(filename): # backend de uma galeria
     try:
         w = int(request.args['w'])
         h = int(request.args['h'])
@@ -290,7 +292,7 @@ def image(filename):
         abort(404)
     return send_from_directory('.', filename)
 
-def index():
+def index(): # backend de uma galeria II
     images = []
     for root, dirs, files in os.walk('.'):
         files.sort(key=os.path.getmtime)
@@ -319,7 +321,7 @@ def index():
 def main(): #Função principal
     while True:
         print_menuascii()
-        print("Bem vindo ao aplicativo Redesol! ")
+        print("Bem vindo ao site Redesol! ")
         print("Menu principal ")
         print("1 - Ver últimos eventos/notícias ")
         print("2 - Newsletter ")
