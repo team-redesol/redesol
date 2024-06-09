@@ -22,8 +22,8 @@ install_dependencies()
 
 # importando tudo agora T U D O
 import webbrowser
-from datetime import datetime
-from dateutil import tz
+from datetime import datetime, time
+from dateutil import tz, parser
 import csv
 import re
 import smtplib
