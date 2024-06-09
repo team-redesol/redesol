@@ -1,5 +1,26 @@
-# importando tudo o que é preciso
 import subprocess
+import sys
+import os
+
+def install_dependencies(): # Instalar dependencias a partir do txt 
+    try:
+        # ativando o ambiente virtual 
+        if not os.path.isdir('venv'):
+            subprocess.check_call([sys.executable, '-m', 'venv', 'venv'])
+        
+        pip_executable = os.path.join('venv', 'Scripts', 'pip') if os.name == 'nt' else os.path.join('venv', 'bin', 'pip')
+        
+        
+        subprocess.check_call([pip_executable, 'install', '-r', 'requirements.txt']) # instalando as bibliotecas a partir do txt
+        print("bibliotecas instaladas com sucesso.")
+    except subprocess.CalledProcessError as e:
+        print(f"Erro ao instalar as bibliotecas: {e}")
+    except FileNotFoundError:
+        print("O comando não foi encontrado, verifique se o Python esta instalado corretamente.")
+
+install_dependencies()
+
+# importando tudo agora T U D O
 import webbrowser
 from datetime import datetime
 from dateutil import tz
@@ -7,32 +28,18 @@ import csv
 import re
 import smtplib
 from email.message import EmailMessage
-import os
-
-from flask import Flask, Response, request, abort, render_template_string, send_from_directory # Importar flask, pillow
+from flask import Flask, Response, request, abort, render_template_string, send_from_directory
 from PIL import Image
 try:
     from io import StringIO  
 except ImportError:
     from io import BytesIO as StringIO  
-    
-def install_dependencies(): # Instalar dependencias a partir do txt 
-    try:
-        subprocess.check_call(['pip', 'install', '-r', 'requirements.txt'])
-        print("Dependências instaladas com sucesso.")
-    except subprocess.CalledProcessError as e:
-        print(f"Erro ao instalar as dependências: {e}")
-    except FileNotFoundError:
-        print("O comando pip não foi encontrado. Verifique se o Python está instalado corretamente.")
 
-install_dependencies()
-
-
+# variaveis globais para uso nas funcoes
 file_emails = 'emails.txt'
 file_news = 'news.csv'
 EMAIL_ADDRESS = 'aredesol2024@outlook.com'
 #email admin: aredesol2024@outlook.com
-
 #senha do admin é redesolpassc0de
 
 def destinatarios (file_emails):
